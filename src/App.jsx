@@ -1,7 +1,28 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
+import axios from 'axios'
+
+
+const URL = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=9653da13-a311-45e4-9c9f-fdfde5dc49e4'
 
 function App() {
+
+  const [crypto, setCrypto] = useState("")
+  const [data, setData] = useState([])
+  const [error, setError] = useState("")
+
+
+
+  const fetchCrypto = async () => {
+    const response = await axios.get(URL)
+    setData(response.data.data) // Definine todos os dados, não apenas um elemento específico
+    }
+
+    useEffect(() => {
+        fetchCrypto()
+    }, [])
+
+  
   
 
   return (
@@ -20,6 +41,11 @@ function App() {
           Buscar
         </button>
       </form>
+      {data.map((crypto, index) => (
+        <div key={index}>
+          <p>{crypto.name}</p>
+        </div>
+      ))}
     </div>
     </>
   )
